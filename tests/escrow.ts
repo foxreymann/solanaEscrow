@@ -22,13 +22,13 @@ describe("anchor-escrow", () => {
 
   const program = anchor.workspace.Contexts as anchor.Program<Contexts>;
   
-  // 0. Set provider, connection and program
+  // Set provider, connection and program
   anchor.setProvider(anchor.AnchorProvider.env());
   const provider = anchor.getProvider();
   const connection = provider.connection;
   const program = anchor.workspace.AnchorEscrow as anchor.Program<AnchorEscrow>;
 
-  // 1. Boilerplate
+  // Boilerplate
   // Determine dummy token mints and token account addresses
   const [initializer, taker, mintA, mintB] = Array.from({ length: 4 }, () => Keypair.generate());
   const [initializerAtaA, initializerAtaB, takerAtaA, takerAtaB] = [initializer, taker]
@@ -122,7 +122,7 @@ describe("anchor-escrow", () => {
       .then(log);
   });
 
-  xit("Cancel", async () => {
+  it("Cancel", async () => {
     await program.methods
       .cancel()
       .accounts({ ...accounts })
@@ -140,29 +140,5 @@ describe("anchor-escrow", () => {
       .rpc()
       .then(confirm)
       .then(log);
-
-    // For Degugging Purpose
-
-    // const latestBlockhash = await anchor
-    //   .getProvider()
-    //   .connection.getLatestBlockhash();
-
-    // const ix = await program.methods
-    //   .exchange()
-    //   .accounts({ ...accounts })
-    //   .signers([taker])
-    //   .instruction()
-
-    // const msg = new TransactionMessage({
-    //   payerKey: provider.publicKey,
-    //   recentBlockhash: latestBlockhash.blockhash,
-    //   instructions: [ix],
-    // }).compileToV0Message();
-
-    // const tx = new VersionedTransaction(msg);
-    // tx.sign([taker]);
-
-    // console.log(Buffer.from(tx.serialize()).toString("base64"));
-    // await provider.sendAndConfirm(tx).then(log);
   });
 });
